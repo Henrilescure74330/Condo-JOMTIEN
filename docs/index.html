@@ -81,10 +81,12 @@ tr.total td { font-weight: 600; border-bottom: 0; background: var(--lagoon-soft)
 .field label { font-size: 0.9rem; font-weight: 500; }
 .field small { color: var(--muted); font-size: 0.8rem; }
 .field input { font: 500 1rem var(--mono); padding: 8px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--ink); width: 100%; box-sizing: border-box; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pair small { grid-column: 1 / -1; color: var(--muted); font-size: 0.8rem; margin-top: -8px; }
 .field input:focus-visible { outline: 2px solid var(--lagoon); outline-offset: 1px; }
 .results { display: grid; gap: 14px; align-content: start; }
 .big { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 20px; display: grid; gap: 4px; }
-.big .value { font-family: var(--display); font-size: 2.6rem; line-height: 1; color: var(--lagoon); }
+.big .value { font-family: var(--display); font-size: 2.2rem; line-height: 1; color: var(--lagoon); }
 .rows { display: grid; gap: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
 .rows div { display: flex; justify-content: space-between; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line); }
 .rows div:last-child { border-bottom: 0; }
@@ -172,10 +174,10 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); color: var
   <section id="rentabilite">
     <span class="eyebrow">La location</span>
     <h2>Simulateur de rentabilité</h2>
-    <p class="lead">Changez les chiffres pour voir le rendement net. Le loyer et les charges sont ceux du propriétaire ; le taux d'occupation, la gestion et la part des frais sont des hypothèses.</p>
+    <p class="lead">Changez les chiffres pour voir le rendement net. La fourchette de loyer et les charges sont celles du propriétaire ; le taux d'occupation, la gestion et la part des frais sont des hypothèses.</p>
     <div class="sim">
       <form class="inputs" id="sim">
-        <div class="field"><label for="loyer">Loyer mensuel (฿)</label><input id="loyer" type="number" min="0" step="500" value="10000"><small>Loyer visé par le propriétaire, location au mois.</small></div>
+        <div class="pair"><div class="field"><label for="loyer">Loyer bas (฿/mois)</label><input id="loyer" type="number" min="0" step="500" value="10000"></div><div class="field"><label for="loyer-haut">Loyer haut (฿/mois)</label><input id="loyer-haut" type="number" min="0" step="500" value="13000"></div><small>Fourchette visée par le propriétaire, location au mois.</small></div>
         <div class="field"><label for="mois">Mois loués par an</label><input id="mois" type="number" min="0" max="12" step="1" value="11"></div>
         <div class="field"><label for="charges">Charges de copropriété par an (฿)</label><input id="charges" type="number" min="0" step="500" value="12000"><small>Environ 30 $ par mois selon le propriétaire, soit près de 1 000 ฿.</small></div>
         <div class="field"><label for="gestion">Frais de gestion (% des loyers)</label><input id="gestion" type="number" min="0" max="50" step="1" value="10"></div>
@@ -184,13 +186,19 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); color: var
       </form>
       <div class="results" aria-live="polite">
         <div class="big"><span class="eyebrow">Rendement net</span><span class="value num" id="r-net">—</span><span class="note" id="r-net-txt"></span></div>
-        <dl class="rows">
-          <div><dt>Coût total d'acquisition</dt><dd id="r-cout">—</dd></div>
-          <div><dt>Loyers encaissés par an</dt><dd id="r-loyers">—</dd></div>
-          <div><dt>Charges et gestion par an</dt><dd id="r-depenses">—</dd></div>
-          <div><dt>Revenu net par an</dt><dd id="r-revenu">—</dd></div>
-          <div><dt>Rendement brut</dt><dd id="r-brut">—</dd></div>
-        </dl>
+        <div class="table-wrap" style="margin-top:0">
+          <table>
+            <thead><tr><th>Par an</th><th class="r">Loyer bas</th><th class="r">Loyer haut</th></tr></thead>
+            <tbody>
+              <tr><td>Loyers encaissés</td><td class="r" id="b-loyers">—</td><td class="r" id="h-loyers">—</td></tr>
+              <tr><td>Charges et gestion</td><td class="r" id="b-depenses">—</td><td class="r" id="h-depenses">—</td></tr>
+              <tr><td>Revenu net</td><td class="r" id="b-revenu">—</td><td class="r" id="h-revenu">—</td></tr>
+              <tr><td>Rendement brut</td><td class="r" id="b-brut">—</td><td class="r" id="h-brut">—</td></tr>
+              <tr class="total"><td>Rendement net</td><td class="r" id="b-net">—</td><td class="r" id="h-net">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note">Coût total d'acquisition : <span class="num" id="r-cout">—</span></p>
         <p class="alert">En Thaïlande, la location de moins de 30 jours dans un condo demande une licence hôtelière. Le simulateur suppose donc une location au mois. Les impôts sur les loyers ne sont pas déduits.</p>
       </div>
     </div>
@@ -206,25 +214,34 @@ const PRIX = 1150000;
 const fmt = (n, d = 0) => n.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
 const val = id => { const v = parseFloat(document.getElementById(id).value); return Number.isFinite(v) ? v : 0; };
 
-function calcule() {
-  const loyer = val("loyer"), mois = Math.min(12, Math.max(0, val("mois")));
-  const charges = val("charges"), gestion = val("gestion") / 100, frais = val("frais");
-  const taux = val("taux") || 1;
-  const cout = PRIX + frais;
+function scenario(loyer, mois, charges, gestion, cout) {
   const loyers = loyer * mois;
   const depenses = charges + loyers * gestion;
   const revenu = loyers - depenses;
-  const net = cout > 0 ? revenu / cout * 100 : 0;
-  const brut = cout > 0 ? loyer * 12 / cout * 100 : 0;
+  return { loyers, depenses, revenu,
+    net: cout > 0 ? revenu / cout * 100 : 0,
+    brut: cout > 0 ? loyer * 12 / cout * 100 : 0 };
+}
+
+function calcule() {
+  const mois = Math.min(12, Math.max(0, val("mois")));
+  const charges = val("charges"), gestion = val("gestion") / 100, frais = val("frais");
+  const taux = val("taux") || 1;
+  const cout = PRIX + frais;
   const eur = x => fmt(Math.round(x / taux)) + " €";
-  document.getElementById("r-net").textContent = fmt(net, 1) + " %";
-  document.getElementById("r-net").style.color = net >= 0 ? "" : "var(--warn)";
-  document.getElementById("r-net-txt").textContent = `Soit ${eur(revenu)} par an, environ ${eur(revenu / 12)} par mois.`;
-  document.getElementById("r-cout").textContent = `${fmt(cout)} ฿ · ${eur(cout)}`;
-  document.getElementById("r-loyers").textContent = `${fmt(loyers)} ฿`;
-  document.getElementById("r-depenses").textContent = `${fmt(depenses)} ฿`;
-  document.getElementById("r-revenu").textContent = `${fmt(revenu)} ฿`;
-  document.getElementById("r-brut").textContent = `${fmt(brut, 1)} %`;
+  const bas = scenario(val("loyer"), mois, charges, gestion, cout);
+  const haut = scenario(val("loyer-haut"), mois, charges, gestion, cout);
+  const set = (id, t) => { document.getElementById(id).textContent = t; };
+  set("r-net", `${fmt(bas.net, 1)} à ${fmt(haut.net, 1)} %`);
+  set("r-net-txt", `Soit ${eur(bas.revenu)} à ${eur(haut.revenu)} par an, environ ${eur(bas.revenu / 12)} à ${eur(haut.revenu / 12)} par mois.`);
+  set("r-cout", `${fmt(cout)} ฿ · ${eur(cout)}`);
+  for (const [k, sc] of [["b", bas], ["h", haut]]) {
+    set(`${k}-loyers`, `${fmt(sc.loyers)} ฿`);
+    set(`${k}-depenses`, `${fmt(sc.depenses)} ฿`);
+    set(`${k}-revenu`, `${fmt(sc.revenu)} ฿`);
+    set(`${k}-brut`, `${fmt(sc.brut, 1)} %`);
+    set(`${k}-net`, `${fmt(sc.net, 1)} %`);
+  }
 }
 document.getElementById("sim").addEventListener("input", calcule);
 document.getElementById("sim").addEventListener("submit", e => e.preventDefault());

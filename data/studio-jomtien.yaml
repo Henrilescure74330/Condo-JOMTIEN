@@ -34,7 +34,7 @@ a_completer:
   - charges de copropriété annuelles
   - loyer de marché estimé (rendement)
 location:
-  loyer_mensuel_thb: 10000
+  loyer_mensuel_thb: 10000      # fourchette visée : 10 000 à 13 000 THB
   mois_loues_par_an: 11
   charges_annuelles_thb: 12000   # environ 30 $ par mois
   frais_gestion_pct: 10
