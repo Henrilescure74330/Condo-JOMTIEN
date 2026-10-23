@@ -19,8 +19,8 @@ J'ai acheté depuis la France un studio de 27,78 m² au Laguna Beach Resort 3 (T
 
 - Prix : 1 150 000 THB, soit environ 41 400 THB/m²
 - Frais officiels (Département des terres) : 74 730 THB, calculés sur la valeur cadastrale de 1 494 564 THB
-- Loyer visé : 10 000 à 13 000 THB par mois, charges environ 30 $ par mois
-- Rendement net estimé : environ 7,5 % à 10 % (11 mois loués, 10 % de frais de gestion)
+- Loyer visé : 11 000 à 13 000 THB par mois, charges environ 30 $ par mois
+- Rendement net estimé : environ 8,3 % à 10 % (11 mois loués, 10 % de frais de gestion)
 
 ## Lancer le calcul
 
