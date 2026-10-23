@@ -3,7 +3,7 @@ name = "condo-jomtien"
 version = "0.1.0"
 description = "Dossier, coût et rentabilité locative d'un studio acheté à Jomtien (Thaïlande)"
 requires-python = ">=3.11"
-dependencies = ["pyyaml>=6"]
+dependencies = ["pyyaml>=6", "cryptography>=42"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
