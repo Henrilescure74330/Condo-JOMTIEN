@@ -1,0 +1,232 @@
+<title>Mon condo à Jomtien</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Mise en page : une colonne de lecture, des bandes pleine largeur pour le bien, l'achat, le coût et le simulateur */
+:root {
+  --bg: #f6f8f8;
+  --surface: #ffffff;
+  --ink: #142326;
+  --muted: #55686b;
+  --line: #d6e0e0;
+  --lagoon: #0f8a8f;
+  --lagoon-soft: #dff1f1;
+  --sand: #c9a46a;
+  --good: #2f7d4a;
+  --warn: #a35a12;
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
+  --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0e1719; --surface: #152226; --ink: #e5eeee; --muted: #9db0b2; --line: #26383c;
+  --lagoon: #4cc3c7; --lagoon-soft: #173a3d; --sand: #d8b880; --good: #6fc48b; --warn: #e3a35c; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0e1719; --surface: #152226; --ink: #e5eeee; --muted: #9db0b2; --line: #26383c;
+  --lagoon: #4cc3c7; --lagoon-soft: #173a3d; --sand: #d8b880; --good: #6fc48b; --warn: #e3a35c; color-scheme: dark }
+
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+section { padding-block: 40px; border-top: 1px solid var(--line); }
+h1, h2 { font-family: var(--display); font-weight: 650; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.08; }
+h2 { font-size: 1.6rem; margin-bottom: 8px; }
+p { margin: 0; max-width: 65ch; }
+.lead { color: var(--muted); font-size: 1.05rem; }
+.eyebrow { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--lagoon); }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* En-tête */
+header { padding-block: 32px 24px; display: grid; gap: 20px; }
+.hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; align-items: end; }
+.hero img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 6px; display: block; }
+.hero-text { display: grid; gap: 14px; min-width: 0; }
+.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.facts div { background: var(--surface); padding: 14px 16px; display: grid; gap: 2px; }
+.facts dt { font-size: 0.78rem; color: var(--muted); }
+.facts dd { margin: 0; font-family: var(--mono); font-size: 1.1rem; font-weight: 500; }
+
+/* Galerie */
+.gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 20px; }
+.gallery figure { margin: 0; display: grid; gap: 6px; }
+.gallery img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 4px; display: block; }
+.gallery figcaption { font-size: 0.85rem; color: var(--muted); }
+
+/* Chronologie */
+.steps { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 0; }
+.steps li { display: grid; grid-template-columns: 110px 18px 1fr; gap: 12px; }
+.steps .date { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); padding-top: 2px; text-align: right; }
+.steps .dot { position: relative; }
+.steps .dot::before { content: ""; position: absolute; left: 4px; top: 7px; width: 10px; height: 10px; border-radius: 50%; background: var(--lagoon); }
+.steps .dot::after { content: ""; position: absolute; left: 8px; top: 20px; bottom: -6px; width: 2px; background: var(--line); }
+.steps li:last-child .dot::after { display: none; }
+.steps .what { padding-bottom: 20px; }
+.steps strong { display: block; font-weight: 600; }
+.steps span { color: var(--muted); font-size: 0.95rem; }
+
+/* Tableau des coûts */
+.table-wrap { overflow-x: auto; margin-top: 20px; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--line); }
+th { font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+td.r, th.r { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+tr.total td { font-weight: 600; border-bottom: 0; background: var(--lagoon-soft); }
+.note { font-size: 0.88rem; color: var(--muted); margin-top: 12px; }
+
+/* Simulateur */
+.sim { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; margin-top: 20px; }
+.inputs { display: grid; gap: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 20px; }
+.field { display: grid; gap: 4px; }
+.field label { font-size: 0.9rem; font-weight: 500; }
+.field small { color: var(--muted); font-size: 0.8rem; }
+.field input { font: 500 1rem var(--mono); padding: 8px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--ink); width: 100%; box-sizing: border-box; }
+.field input:focus-visible { outline: 2px solid var(--lagoon); outline-offset: 1px; }
+.results { display: grid; gap: 14px; align-content: start; }
+.big { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 20px; display: grid; gap: 4px; }
+.big .value { font-family: var(--display); font-size: 2.6rem; line-height: 1; color: var(--lagoon); }
+.rows { display: grid; gap: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+.rows div { display: flex; justify-content: space-between; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line); }
+.rows div:last-child { border-bottom: 0; }
+.rows dt { color: var(--muted); }
+.rows dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.alert { border-left: 3px solid var(--warn); padding: 10px 14px; background: var(--surface); font-size: 0.92rem; }
+.tag { display: inline-block; font-family: var(--mono); font-size: 0.72rem; padding: 2px 6px; border-radius: 3px; background: var(--lagoon-soft); color: var(--lagoon); margin-left: 6px; vertical-align: middle; }
+
+footer { padding-block: 28px 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.85rem; }
+
+@media (max-width: 760px) {
+  .hero, .sim { grid-template-columns: 1fr; }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .steps li { grid-template-columns: 84px 18px 1fr; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="hero">
+      <div class="hero-text">
+        <span class="eyebrow">Jomtien · Chonburi · Thaïlande</span>
+        <h1>Un studio face au lagon, au Laguna Beach Resort 3</h1>
+        <p class="lead">Studio meublé de 27,78 m² au 2ᵉ étage de la résidence The Maldives, acheté en 2026 en pleine propriété (freehold étranger) et destiné à la location.</p>
+      </div>
+      <img src="img/piscine.jpg" alt="Vue du balcon sur la piscine lagon bordée de palmiers">
+    </div>
+    <dl class="facts">
+      <div><dt>Surface</dt><dd>27,78 m²</dd></div>
+      <div><dt>Prix d'achat</dt><dd>1 150 000 ฿</dd></div>
+      <div><dt>Prix au m²</dt><dd>41 397 ฿</dd></div>
+      <div><dt>En euros (37,50 ฿/€)</dt><dd>≈ 30 667 €</dd></div>
+    </dl>
+  </header>
+
+  <section id="bien">
+    <span class="eyebrow">Le bien</span>
+    <h2>Ce que loue un locataire</h2>
+    <p class="lead">Une pièce à vivre avec lit double, cuisine équipée, salle d'eau avec douche vitrée et balcon sur la piscine lagon. Climatisation et réfrigérateur fournis.</p>
+    <div class="gallery">
+      <figure><img src="img/chambre.jpg" alt="Lit double devant la baie vitrée" loading="lazy"><figcaption>Pièce principale, vue piscine</figcaption></figure>
+      <figure><img src="img/sejour.jpg" alt="Studio vu depuis la fenêtre vers l'entrée" loading="lazy"><figcaption>Studio, de la baie à l'entrée</figcaption></figure>
+      <figure><img src="img/cuisine.jpg" alt="Cuisine avec plaque, évier et réfrigérateur" loading="lazy"><figcaption>Cuisine équipée</figcaption></figure>
+      <figure><img src="img/salle-de-bain.jpg" alt="Salle d'eau avec douche vitrée et lavabo" loading="lazy"><figcaption>Salle d'eau</figcaption></figure>
+      <figure><img src="img/balcon.jpg" alt="Balcon avec climatiseur et vue sur la piscine" loading="lazy"><figcaption>Balcon</figcaption></figure>
+      <figure><img src="img/piscine.jpg" alt="Piscine lagon et palmiers" loading="lazy"><figcaption>Piscine lagon de la résidence</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="achat">
+    <span class="eyebrow">L'achat</span>
+    <h2>Acheter depuis la France, étape par étape</h2>
+    <p class="lead">Tout l'achat s'est fait à distance, avec une procuration et une agence sur place.</p>
+    <ol class="steps">
+      <li><span class="date">30 juin 2026</span><span class="dot"></span><div class="what"><strong>Acompte de réservation</strong><span>1 300 € par virement international, reçus 48 231 ฿ après frais (taux 37,50 ฿/€).</span></div></li>
+      <li><span class="date">17 juil. 2026</span><span class="dot"></span><div class="what"><strong>Procuration préparée par l'agence</strong><span>Formulaire officiel Or Cho 21 du Département des terres, pour l'achat d'un lot de copropriété.</span></div></li>
+      <li><span class="date">20 juil. 2026</span><span class="dot"></span><div class="what"><strong>Signature devant notaire en France</strong><span>La signature est certifiée par un notaire à Annecy.</span></div></li>
+      <li><span class="date">9 sept. 2026</span><span class="dot"></span><div class="what"><strong>Procuration finale envoyée en Thaïlande</strong><span>Nouvelle version certifiée, envoyée par Chronopost à l'agence de Pattaya (66 €).</span></div></li>
+      <li><span class="date">17 sept. 2026</span><span class="dot"></span><div class="what"><strong>Transfert au bureau foncier</strong><span>Bureau foncier de Chonburi, antenne de Bang Lamung, où le titre est mis au nom de l'acheteur.</span></div></li>
+      <li><span class="date">30 sept. 2026</span><span class="dot"></span><div class="what"><strong>Remise des clés et état des lieux</strong><span>Photos et vidéos du studio, prêt à être loué.</span></div></li>
+    </ol>
+  </section>
+
+  <section id="cout">
+    <span class="eyebrow">Le coût</span>
+    <h2>Combien coûte réellement l'achat</h2>
+    <p class="lead">Les frais officiels se calculent sur la valeur cadastrale (1 494 564 ฿), plus élevée que le prix de vente.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Poste</th><th>Base</th><th class="r">Montant (฿)</th><th class="r">Payé par</th></tr></thead>
+        <tbody>
+          <tr><td>Prix de vente</td><td>Contrat</td><td class="r">1 150 000</td><td class="r">Acheteur</td></tr>
+          <tr><td>Frais de transfert</td><td>2 % de la valeur cadastrale</td><td class="r">29 892</td><td class="r">Partagé ?</td></tr>
+          <tr><td>Impôt retenu à la source</td><td>Barème du vendeur</td><td class="r">37 365</td><td class="r">Vendeur ?</td></tr>
+          <tr><td>Taxe spécifique</td><td>Vendeur propriétaire depuis plus de 5 ans</td><td class="r">0</td><td class="r">—</td></tr>
+          <tr><td>Droit de timbre</td><td>0,5 % de la valeur cadastrale</td><td class="r">7 473</td><td class="r">Vendeur ?</td></tr>
+          <tr class="total"><td>Frais officiels totaux</td><td></td><td class="r">74 730</td><td class="r"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Source : simulation du Département des terres de Thaïlande. La répartition des frais entre acheteur et vendeur reste à confirmer ; l'usage le plus courant est indiqué avec un point d'interrogation.</p>
+  </section>
+
+  <section id="rentabilite">
+    <span class="eyebrow">La location</span>
+    <h2>Simulateur de rentabilité</h2>
+    <p class="lead">Changez les chiffres pour voir le rendement net. Le loyer et les charges sont ceux du propriétaire ; le taux d'occupation, la gestion et la part des frais sont des hypothèses.</p>
+    <div class="sim">
+      <form class="inputs" id="sim">
+        <div class="field"><label for="loyer">Loyer mensuel (฿)</label><input id="loyer" type="number" min="0" step="500" value="10000"><small>Loyer visé par le propriétaire, location au mois.</small></div>
+        <div class="field"><label for="mois">Mois loués par an</label><input id="mois" type="number" min="0" max="12" step="1" value="11"></div>
+        <div class="field"><label for="charges">Charges de copropriété par an (฿)</label><input id="charges" type="number" min="0" step="500" value="12000"><small>Environ 30 $ par mois selon le propriétaire, soit près de 1 000 ฿.</small></div>
+        <div class="field"><label for="gestion">Frais de gestion (% des loyers)</label><input id="gestion" type="number" min="0" max="50" step="1" value="10"></div>
+        <div class="field"><label for="frais">Part des frais d'achat payée par l'acheteur (฿)</label><input id="frais" type="number" min="0" step="100" value="14946"><small>Hypothèse : la moitié des frais de transfert de 2 %.</small></div>
+        <div class="field"><label for="taux">Taux de change (฿ pour 1 €)</label><input id="taux" type="number" min="1" step="0.1" value="37.5"></div>
+      </form>
+      <div class="results" aria-live="polite">
+        <div class="big"><span class="eyebrow">Rendement net</span><span class="value num" id="r-net">—</span><span class="note" id="r-net-txt"></span></div>
+        <dl class="rows">
+          <div><dt>Coût total d'acquisition</dt><dd id="r-cout">—</dd></div>
+          <div><dt>Loyers encaissés par an</dt><dd id="r-loyers">—</dd></div>
+          <div><dt>Charges et gestion par an</dt><dd id="r-depenses">—</dd></div>
+          <div><dt>Revenu net par an</dt><dd id="r-revenu">—</dd></div>
+          <div><dt>Rendement brut</dt><dd id="r-brut">—</dd></div>
+        </dl>
+        <p class="alert">En Thaïlande, la location de moins de 30 jours dans un condo demande une licence hôtelière. Le simulateur suppose donc une location au mois. Les impôts sur les loyers ne sont pas déduits.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Projet personnel « Opportunités Thaïlande », 2026, conçu et développé avec Claude Code. Données issues du dossier d'achat ; aucune pièce d'identité ni coordonnée bancaire n'est publiée.
+  </footer>
+</div>
+
+<script>
+const PRIX = 1150000;
+const fmt = (n, d = 0) => n.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
+const val = id => { const v = parseFloat(document.getElementById(id).value); return Number.isFinite(v) ? v : 0; };
+
+function calcule() {
+  const loyer = val("loyer"), mois = Math.min(12, Math.max(0, val("mois")));
+  const charges = val("charges"), gestion = val("gestion") / 100, frais = val("frais");
+  const taux = val("taux") || 1;
+  const cout = PRIX + frais;
+  const loyers = loyer * mois;
+  const depenses = charges + loyers * gestion;
+  const revenu = loyers - depenses;
+  const net = cout > 0 ? revenu / cout * 100 : 0;
+  const brut = cout > 0 ? loyer * 12 / cout * 100 : 0;
+  const eur = x => fmt(Math.round(x / taux)) + " €";
+  document.getElementById("r-net").textContent = fmt(net, 1) + " %";
+  document.getElementById("r-net").style.color = net >= 0 ? "" : "var(--warn)";
+  document.getElementById("r-net-txt").textContent = `Soit ${eur(revenu)} par an, environ ${eur(revenu / 12)} par mois.`;
+  document.getElementById("r-cout").textContent = `${fmt(cout)} ฿ · ${eur(cout)}`;
+  document.getElementById("r-loyers").textContent = `${fmt(loyers)} ฿`;
+  document.getElementById("r-depenses").textContent = `${fmt(depenses)} ฿`;
+  document.getElementById("r-revenu").textContent = `${fmt(revenu)} ฿`;
+  document.getElementById("r-brut").textContent = `${fmt(brut, 1)} %`;
+}
+document.getElementById("sim").addEventListener("input", calcule);
+document.getElementById("sim").addEventListener("submit", e => e.preventDefault());
+calcule();
+</script>

@@ -1,0 +1,12 @@
+[project]
+name = "condo-jomtien"
+version = "0.1.0"
+description = "Dossier, coût et rentabilité locative d'un studio acheté à Jomtien (Thaïlande)"
+requires-python = ">=3.11"
+dependencies = ["pyyaml>=6"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
