@@ -35,7 +35,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font-family: system-
 <div id="app"></div>
 <script>
 const SEL = "__SEL__", ITERATIONS = __ITERATIONS__, BASE_PHOTOS = "__BASE_PHOTOS__";
-const CONTENU = "__CONTENU__";
+const COMPRESSE = __COMPRESSE__, CONTENU = "__CONTENU__";
 const octets = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 
 async function deriver(mdp) {
@@ -69,7 +69,9 @@ async function ouvrir(mdp, silencieux) {
   bouton.disabled = true; erreur.textContent = "";
   try {
     const cle = await deriver(mdp);
-    const html = new TextDecoder().decode(await dechiffrer(cle, octets(CONTENU)));
+    let clair = await dechiffrer(cle, octets(CONTENU));
+    if (COMPRESSE) clair = await new Response(new Blob([clair]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer();
+    const html = new TextDecoder().decode(clair);
     try { sessionStorage.setItem("condo-mdp", mdp); } catch (e) {}
     await afficher(cle, html);
   } catch (e) {

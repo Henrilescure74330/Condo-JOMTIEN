@@ -9,6 +9,7 @@ Usage :
 """
 import argparse
 import base64
+import gzip
 import os
 import re
 import secrets
@@ -44,12 +45,19 @@ def main() -> None:
                    help="met les photos dans le texte chiffré au lieu de fichiers img/*.bin")
     p.add_argument("--base-photos", default="img/",
                    help="adresse où la page va chercher les photos chiffrées")
+    p.add_argument("--compresser", action="store_true",
+                   help="compresse la page avant de la chiffrer (fichier plus petit)")
+    p.add_argument("--meme-cle-que", type=Path,
+                   help="reprend le sel d'une page déjà chiffrée, pour lire ses photos avec la même clé")
     p.add_argument("--sans-photos", action="store_true",
                    help="n'écrit pas les photos chiffrées (elles sont lues depuis --base-photos)")
     args = p.parse_args()
 
     mot_de_passe = os.environ["MOT_DE_PASSE"]
-    sel = secrets.token_bytes(16)
+    if args.meme_cle_que:
+        sel = base64.b64decode(re.search(r'SEL = "([^"]+)"', args.meme_cle_que.read_text(encoding="utf-8")).group(1))
+    else:
+        sel = secrets.token_bytes(16)
     aes = AESGCM(cle(mot_de_passe, sel))
     html = (args.source / "index.html").read_text(encoding="utf-8")
     args.sortie.mkdir(parents=True, exist_ok=True)
@@ -65,11 +73,13 @@ def main() -> None:
         return f'data-photo="{nom}"'
 
     html = re.sub(r'src="img/([\w-]+)\.jpg"', photo, html)
+    contenu = gzip.compress(html.encode(), mtime=0) if args.compresser else html.encode()
     page = (GABARIT.read_text(encoding="utf-8")
             .replace("__SEL__", b64(sel))
             .replace("__ITERATIONS__", str(ITERATIONS))
             .replace("__BASE_PHOTOS__", args.base_photos)
-            .replace("__CONTENU__", b64(chiffrer(aes, html.encode()))))
+            .replace("__COMPRESSE__", "true" if args.compresser else "false")
+            .replace("__CONTENU__", b64(chiffrer(aes, contenu))))
     (args.sortie / "index.html").write_text(page, encoding="utf-8")
 
 
