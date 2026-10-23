@@ -37,6 +37,10 @@ La page en clair et les photos ne sont pas dans le dépôt : seule leur version 
 
 ```bash
 MOT_DE_PASSE=... python outils/chiffrer.py chemin/vers/la/page docs
+
+# copie autonome (Google Drive), qui lit les mêmes photos chiffrées que le site
+MOT_DE_PASSE=... python outils/chiffrer.py chemin/vers/la/page copie --sans-photos --compresser \
+  --meme-cle-que docs/index.html --base-photos https://henrilescure74330.github.io/Condo-JOMTIEN/docs/img/
 ```
 
 ## Confidentialité
